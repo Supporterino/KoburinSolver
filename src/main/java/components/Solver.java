@@ -121,7 +121,33 @@ public class Solver {
                     }
                     if (activeCell.getValue() == 3) {
                         if (surroundings.size() <= 3) surroundings.forEach(item -> board.blackCell(item.getX(), item.getY()));
+                        else {
+                            int choice = ThreadLocalRandom.current().nextInt(4);
+                            switch (choice) {
+                                case 0:
+                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
+                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
+                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
+                                    break;
+                                case 1:
+                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
+                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
+                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
+                                    break;
+                                case 2:
+                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
+                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
+                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
+                                    break;
+                                case 3:
+                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
+                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
+                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
+                                    break;
+                            }
+                        }
                     }
+                    else surroundings.forEach(item -> board.blackCell(item.getX(), item.getY()));
                 }
             }
         }
