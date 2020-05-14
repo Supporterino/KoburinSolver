@@ -19,6 +19,19 @@ public class Board {
         }
     }
 
+    public Cell getCell(int x, int y) {
+        if (x < 0 || y < 0 || x >= dimension || y >= dimension) return null;
+        else return internalBoard[x][y];
+    }
+
+    public boolean blackCell(int x, int y) {
+        if (x > 0 && y > 0 && x <= dimension && y <= dimension && internalBoard[x][y].isCanBeBlack()) {
+            internalBoard[x][y].setCanBeBlack(true);
+            return true;
+        }
+        return false;
+    }
+
     public Cell[][] getInternalBoard() {
         return internalBoard;
     }
