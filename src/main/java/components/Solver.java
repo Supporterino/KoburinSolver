@@ -1,18 +1,22 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Solver {
     private Board board;
-    private ArrayList<Cell[][]> history;
+    private ArrayList<String> history;
+    private Cell[][] initialBoard;
 
     public Solver(Board board) {
         this.board = board;
+        history = new ArrayList<String>();
     }
 
     public void run() {
         blackenCells();
+        System.out.println(history.size());
     }
 
     private void blackenCells() {
@@ -152,4 +156,5 @@ public class Solver {
             }
         }
     }
+
 }

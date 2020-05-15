@@ -13,6 +13,6 @@ public class Application {
         System.out.println(board.toString());
         System.out.println("Starting Solving...");
         solver.run();
-        System.out.println(board.toString());
+        //System.out.println(board.toString());
     }
 }

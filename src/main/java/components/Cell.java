@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Cell {
     private int x;
     private int y;
-    private boolean isNumeric;
+    private boolean isNumeric = false;
     private int value;
     private boolean canBeBlack = true;
     private boolean blackend = false;

@@ -25,8 +25,8 @@ public class Board {
     }
 
     public boolean blackCell(int x, int y) {
-        if (x > 0 && y > 0 && x <= dimension && y <= dimension && internalBoard[x][y].isCanBeBlack()) {
-            internalBoard[x][y].setCanBeBlack(true);
+        if (x >= 0 && y >= 0 && x <= dimension && y <= dimension && internalBoard[x][y].isCanBeBlack()) {
+            internalBoard[x][y].setBlackend(true);
             return true;
         }
         return false;
