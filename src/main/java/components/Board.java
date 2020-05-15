@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Board {
     private Cell[][] internalBoard;
     private int dimension;
+    private MersenneTwister random = new MersenneTwister();
 
     public Board(int dimension) {
         this.dimension = dimension;
@@ -14,7 +15,7 @@ public class Board {
         internalBoard = new Cell[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                internalBoard[i][j] = new Cell(i, j);
+                internalBoard[i][j] = new Cell(i, j, '_');
             }
         }
     }
@@ -22,14 +23,6 @@ public class Board {
     public Cell getCell(int x, int y) {
         if (x < 0 || y < 0 || x >= dimension || y >= dimension) return null;
         else return internalBoard[x][y];
-    }
-
-    public boolean blackCell(int x, int y) {
-        if (x >= 0 && y >= 0 && x <= dimension && y <= dimension && internalBoard[x][y].isCanBeBlack()) {
-            internalBoard[x][y].setBlackend(true);
-            return true;
-        }
-        return false;
     }
 
     public Cell[][] getInternalBoard() {
@@ -62,6 +55,32 @@ public class Board {
 
     public void setDimension(int dimension) {
         this.dimension = dimension;
+    }
+
+    public void blackenAdjacentFields() {
+        for (int y = 0; y < internalBoard.length; y++) {
+            for (int x = 0; x < internalBoard[y].length; x++) {
+                if (internalBoard[x][y].isNumber()) {
+                    System.out.println("-- Blackening: " + internalBoard[x][y]);
+                    internalBoard[x][y].doBlackening(this);
+                }
+            }
+        }
+        this.blackenRandomFields();
+    }
+
+    public void blackenRandomFields() {
+        double probability = 4 / 100;
+        for (int x = 0; x < this.internalBoard.length; x++) {
+            for (int y = 0; y < this.internalBoard.length; y++) {
+                if (internalBoard[x][y].getValue() == '_') {
+                    if (this.random.nextDouble(true, true) <= probability) {
+                        System.out.println("----- Blackening random: " + internalBoard[x][y]);
+                        internalBoard[x][y] = new Cell(x, y, 'x');
+                    }
+                }
+            }
+        }
     }
 
     @Override

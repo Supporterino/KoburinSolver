@@ -26,7 +26,7 @@ public class Loader {
             int value = numberCells.getJSONObject(i).getInt("value");
 
             Cell[][] tempBoard = board.getInternalBoard();
-            tempBoard[x][y].setNumeric(true, value);
+            tempBoard[x][y].setValue((char) (value + '0'));
             board.setInternalBoard(tempBoard);
         }
     }

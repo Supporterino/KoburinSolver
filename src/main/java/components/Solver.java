@@ -1,160 +1,135 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.HashSet;
 
-public class Solver {
-    private Board board;
-    private ArrayList<String> history;
-    private Cell[][] initialBoard;
+import gui.Main;
 
-    public Solver(Board board) {
+public class Solver implements Runnable {
+
+    private int counter;
+    private Main controller;
+    private Loader loader;
+    private String filepath;
+
+    private final Board board;
+
+    HashSet<String> historicBoards = new HashSet<>();
+
+    private boolean solutionFound = false;
+
+    public Solver(Board board, Main contr, String path) {
         this.board = board;
-        history = new ArrayList<String>();
+        this.controller = contr;
+        this.loader = new Loader(board);
+        this.filepath = path;
     }
 
-    public void run() {
-        blackenCells();
-        System.out.println(history.size());
+    public Board getBoard() {
+        return this.board;
     }
 
-    private void blackenCells() {
-        for (int i = 0; i < board.getDimension(); i++) {
-            for (int j = 0; j < board.getDimension(); j++) {
-                Cell activeCell = board.getCell(i, j);
-                if (activeCell.isNumeric()) {
-                    ArrayList<Cell> surroundings = activeCell.getSurroundingCells(board);
-                    surroundings.removeIf(cell -> !cell.isCanBeBlack());
-                    if (activeCell.getValue() == 0) {
-                        surroundings.forEach(item -> item.setCanBeBlack(false));
-                    }
-                    if (activeCell.getValue() == 1) {
-                        if (surroundings.size() == 1) board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                        if (surroundings.size() == 2) {
-                            int choice = ThreadLocalRandom.current().nextInt(2);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    break;
-                            }
-                        }
-                        if (surroundings.size() == 3) {
-                            int choice = ThreadLocalRandom.current().nextInt(3);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    break;
-                                case 2:
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                            }
-                        }
-                        if (surroundings.size() == 4) {
-                            int choice = ThreadLocalRandom.current().nextInt(4);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    break;
-                                case 2:
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                                case 3:
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                            }
-                        }
-                    }
-                    if (activeCell.getValue() == 2) {
-                        if (surroundings.size() <= 2) surroundings.forEach(item -> board.blackCell(item.getX(), item.getY()));
-                        if (surroundings.size() == 3) {
-                            int choice = ThreadLocalRandom.current().nextInt(3);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                                case 2:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                            }
-                        }
-                        if (surroundings.size() == 4) {
-                            int choice = ThreadLocalRandom.current().nextInt(6);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                                case 2:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                                case 3:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                                case 4:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                                case 5:
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                            }
-                        }
-                    }
-                    if (activeCell.getValue() == 3) {
-                        if (surroundings.size() <= 3) surroundings.forEach(item -> board.blackCell(item.getX(), item.getY()));
-                        else {
-                            int choice = ThreadLocalRandom.current().nextInt(4);
-                            switch (choice) {
-                                case 0:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    break;
-                                case 1:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                                case 2:
-                                    board.blackCell(surroundings.get(0).getX(), surroundings.get(0).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                                case 3:
-                                    board.blackCell(surroundings.get(1).getX(), surroundings.get(1).getY());
-                                    board.blackCell(surroundings.get(2).getX(), surroundings.get(2).getY());
-                                    board.blackCell(surroundings.get(3).getX(), surroundings.get(3).getY());
-                                    break;
-                            }
-                        }
-                    }
-                    else surroundings.forEach(item -> board.blackCell(item.getX(), item.getY()));
+    public boolean getSolutionState() {
+        return solutionFound;
+    }
+
+    public void setSolutionState(boolean solutionFound) {
+        this.solutionFound = solutionFound;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public void addCheckedBoard(String board) {
+        this.historicBoards.add(board);
+    }
+
+    public boolean alreadyChecked(String board) {
+        return historicBoards.contains(board);
+    }
+
+
+    public boolean finalValidation() {
+        for (Cell[] row : board.getInternalBoard()) {
+            for (Cell field : row) {
+                if (!field.isUsed()) {
+                    return false;
                 }
             }
         }
+        System.out.println("Lösung gefunden!");
+        this.solutionFound = true;
+        this.counter = 0;
+        return true;
     }
 
+    public boolean solve(int x, int y) {
+        if (this.historicBoards.contains(this.board.toString())) {
+            System.out.println("Already checked this board possibility!");
+            return false;
+        }
+        historicBoards.add(this.board.toString());
+        return solve(board.getCell(x, y));
+    }
+
+    public void run() {
+        System.out.println("Start Solving");
+        reset();
+        loader.initConfig(filepath);
+        loader.loadConfig();
+        System.out.println("Initial Board");
+        System.out.println(board.toString());
+
+        board.blackenAdjacentFields();
+        System.out.println("Blackend Board");
+        System.out.println(board.toString());
+
+        setCounter(0);
+        solve(0, 0);
+        System.out.println("Possible Solution found:");
+        System.out.println(solutionFound);
+        //System.out.println(board.toString());
+        controller.update(board);
+        /*do {
+
+            setCounter(0);
+            solve(0, 0);
+            System.out.println(board.toString());
+        } while (!solutionFound);*/
+
+        System.out.println("Finished Solving");
+    }
+
+
+    public boolean solve(Cell currentCell) {
+        /*if (counter % 20 == 0) {
+            Platform.runLater(() -> controller.update(board));
+        }*/
+        if (currentCell.isStart()) {
+            return finalValidation();
+        }
+
+        if (counter == 0) {
+            currentCell.setStart(true);
+        }
+
+        currentCell.enter();
+        ArrayList<Cell> possibleCells = currentCell.possibleValues(board);
+        for (Cell c : possibleCells) {
+            currentCell.setNext(c);
+            counter++;
+            if (solve(c)) {
+                return true;
+            }
+        }
+        currentCell.leave();
+        return false;
+    }
+
+    public void reset() {
+        this.historicBoards = new HashSet<>();
+        this.counter = 0;
+    }
 }
+
