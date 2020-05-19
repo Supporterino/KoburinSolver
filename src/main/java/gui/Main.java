@@ -7,8 +7,12 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -25,21 +29,60 @@ public class Main extends Application {
         Button run = new Button("Run");
         run.setOnMouseClicked(mouseEvent -> solver.run());
 
+        Button step = new Button("Step");
+        step.setOnMouseClicked(mouseEvent -> solver.step());
+
+        Label label = new Label("Drag a file to me.");
+        Label dropped = new Label("");
+        VBox dragTarget = new VBox();
+        dragTarget.getChildren().addAll(label, dropped);
+
         GridPane root = new GridPane();
         root.setPadding(new Insets(20, 20, 20, 20));
         root.add(run, 0, 0);
+        root.add(step, 1, 0);
+        root.add(dragTarget, 2, 0);
 
         pane = new Pane();
-        root.add(pane, 0, 1, 2, 2);
+        root.add(pane, 0, 1, 3, 2);
 
         Scene scene = new Scene(root);
 
+        scene.setOnDragOver(event -> {
+            if (event.getGestureSource() != dragTarget
+                    && event.getDragboard().hasFiles()) {
+                /* allow for both copying and moving, whatever user chooses */
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+        scene.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                dropped.setText(db.getFiles().get(0).toPath().toString());
+                try {
+                    // clear previous board (place rectangle over)
+                    System.out.println("Dragged");
+                    solver.setFilepath(db.getFiles().get(0).toPath().toString() );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                success = true;
+            }
+            event.setDropCompleted(success);
+
+            event.consume();
+        });
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Koburin Solver");
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(800);
         primaryStage.show();
 
         board = new Board(0);
-        solver = new Solver(board, this, "/Users/larsroth/Documents/Repos/KoburinSolver/src/main/resources/simple.json");
+        solver = new Solver(board, this, "/Users/larsroth/Documents/Repos/KoburinSolver/src/main/resources/4x4_simple.json");
     }
 
     public static void main(String[] args) {

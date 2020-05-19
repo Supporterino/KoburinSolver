@@ -24,9 +24,9 @@ public class Loader {
             int x = numberCells.getJSONObject(i).getInt("x");
             int y = numberCells.getJSONObject(i).getInt("y");
             int value = numberCells.getJSONObject(i).getInt("value");
-
+            //System.out.println("NumberCell at x:" + x + " y:" + y + " value:" + value);
             Cell[][] tempBoard = board.getInternalBoard();
-            tempBoard[x][y].setValue((char) (value + '0'));
+            tempBoard[y][x].setValue((char) (value + '0'));
             board.setInternalBoard(tempBoard);
         }
     }

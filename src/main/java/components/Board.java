@@ -61,7 +61,7 @@ public class Board {
         for (int y = 0; y < internalBoard.length; y++) {
             for (int x = 0; x < internalBoard[y].length; x++) {
                 if (internalBoard[x][y].isNumber()) {
-                    System.out.println("-- Blackening: " + internalBoard[x][y]);
+                    //System.out.println("-- Blackening: " + internalBoard[x][y]);
                     internalBoard[x][y].doBlackening(this);
                 }
             }

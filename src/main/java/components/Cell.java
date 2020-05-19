@@ -110,11 +110,10 @@ public class Cell {
 
     public void addToBlackSurroundings(Cell cell) {
         if (surroundedBlackCells.size() < getNumber()) {
-            //System.out.println("sup dawg, adding " + cell + " to blackend cells for mah nigga " + this); // less profanity
             cell.setBlack();
             surroundedBlackCells.add(cell);
         } else {
-            System.err.println("@solver.Cell.java 105 - Already statisfied.");
+            System.err.println("Black Cell Need already statisfied.");
         }
     }
 
@@ -141,12 +140,12 @@ public class Cell {
             }
         }
 
-        List<Cell> unsatisfieds = remaining //Arrays.asList(above, below, left, right)
+        List<Cell> unsatisfieds = remaining
                 .stream()
                 .filter(c -> c.isBlackable(board))
                 .collect(Collectors.toList());
 
-        Collections.shuffle(unsatisfieds); // zufällig wählen
+        Collections.shuffle(unsatisfieds);
 
         unsatisfieds.subList(0, inNeedOf()).forEach(this::addToBlackSurroundings);
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import gui.Main;
+import javafx.application.Platform;
 
 public class Solver implements Runnable {
 
@@ -23,6 +24,14 @@ public class Solver implements Runnable {
         this.controller = contr;
         this.loader = new Loader(board);
         this.filepath = path;
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 
     public Board getBoard() {
@@ -73,39 +82,51 @@ public class Solver implements Runnable {
         return solve(board.getCell(x, y));
     }
 
-    public void run() {
+    private void initBoard() {
         System.out.println("Start Solving");
         reset();
         loader.initConfig(filepath);
         loader.loadConfig();
-        System.out.println("Initial Board");
-        System.out.println(board.toString());
+        //System.out.println("Initial Board");
+        //System.out.println(board.toString());
+    }
 
+    private void blackening() {
         board.blackenAdjacentFields();
-        System.out.println("Blackend Board");
-        System.out.println(board.toString());
+        //System.out.println("Blackend Board");
+        //System.out.println(board.toString());
+    }
 
+    private void oneStep() {
         setCounter(0);
         solve(0, 0);
-        System.out.println("Possible Solution found:");
-        System.out.println(solutionFound);
-        //System.out.println(board.toString());
+        //System.out.println("Possible Solution found:");
+        //System.out.println(solutionFound);
         controller.update(board);
-        /*do {
+    }
 
-            setCounter(0);
-            solve(0, 0);
-            System.out.println(board.toString());
-        } while (!solutionFound);*/
+    public void step() {
+        initBoard();
+        blackening();
+        oneStep();
+        System.out.println("Step done!");
+    }
 
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            if (!solutionFound) {
+                initBoard();
+                blackening();
+                oneStep();
+            }
+            else break;
+        }
+        controller.update(board);
         System.out.println("Finished Solving");
     }
 
 
     public boolean solve(Cell currentCell) {
-        /*if (counter % 20 == 0) {
-            Platform.runLater(() -> controller.update(board));
-        }*/
         if (currentCell.isStart()) {
             return finalValidation();
         }
@@ -130,6 +151,7 @@ public class Solver implements Runnable {
     public void reset() {
         this.historicBoards = new HashSet<>();
         this.counter = 0;
+        this.solutionFound = false;
     }
 }
 
