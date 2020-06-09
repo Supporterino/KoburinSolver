@@ -64,7 +64,10 @@ public class Main extends Application {
                 try {
                     // clear previous board (place rectangle over)
                     System.out.println("Dragged");
-                    solver.setFilepath(db.getFiles().get(0).toPath().toString() );
+                    //solver.setFilepath(db.getFiles().get(0).toPath().toString());
+                    solver = new Solver(new Board(0), this, db.getFiles().get(0).toPath().toString());
+                    solver.init();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

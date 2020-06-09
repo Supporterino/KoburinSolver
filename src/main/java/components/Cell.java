@@ -22,10 +22,6 @@ public class Cell {
         return this.value == 'x';
     }
 
-    public void setValue(char value) {
-        this.value = value;
-    }
-
     public boolean isUsed() {
         return isBlackend() || isNumber() || next != null;
     }
@@ -38,12 +34,12 @@ public class Cell {
         return start;
     }
 
-    public boolean isEmpty() {
-        return this.value == '_';
-    }
-
     public void setStart(boolean start) {
         this.start = start;
+    }
+
+    public boolean isEmpty() {
+        return this.value == '_';
     }
 
     public void setBlack() {
@@ -58,9 +54,12 @@ public class Cell {
         return !isBlackend() && !isNumber() && (this.next == null || this.start);
     }
 
-
     public char getValue() {
         return value;
+    }
+
+    public void setValue(char value) {
+        this.value = value;
     }
 
     public Cell getNext() {

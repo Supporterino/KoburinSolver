@@ -26,6 +26,11 @@ public class Solver implements Runnable {
         this.filepath = path;
     }
 
+    public void init() {
+        initBoard();
+        controller.update(board);
+    }
+
     public String getFilepath() {
         return filepath;
     }
