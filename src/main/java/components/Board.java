@@ -1,7 +1,5 @@
 package components;
-
-import java.util.Arrays;
-
+/* author = 4102770 */
 public class Board {
     private Cell[][] internalBoard;
     private int dimension;
@@ -63,21 +61,6 @@ public class Board {
                 if (internalBoard[x][y].isNumber()) {
                     //System.out.println("-- Blackening: " + internalBoard[x][y]);
                     internalBoard[x][y].doBlackening(this);
-                }
-            }
-        }
-        this.blackenRandomFields();
-    }
-
-    public void blackenRandomFields() {
-        double probability = 4 / 100;
-        for (int x = 0; x < this.internalBoard.length; x++) {
-            for (int y = 0; y < this.internalBoard.length; y++) {
-                if (internalBoard[x][y].getValue() == '_') {
-                    if (this.random.nextDouble(true, true) <= probability) {
-                        System.out.println("----- Blackening random: " + internalBoard[x][y]);
-                        internalBoard[x][y] = new Cell(x, y, 'x');
-                    }
                 }
             }
         }

@@ -18,7 +18,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+/* author = 4102770 */
 public class Main extends Application {
     private Pane pane;
     private Board board;
@@ -97,7 +97,7 @@ public class Main extends Application {
         this.showBoard();
     }
 
-    public void showBoard() {
+    private void showBoard() {
         //Clear GUI of old Grids
         pane.getChildren().clear();
 

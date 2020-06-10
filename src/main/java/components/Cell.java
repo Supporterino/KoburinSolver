@@ -2,7 +2,7 @@ package components;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+/* author = 4102770 */
 public class Cell {
     public int x;
     public int y;
@@ -43,7 +43,6 @@ public class Cell {
     }
 
     public void setBlack() {
-        //System.out.println("ayy yoo, ya blackening me?? I'm the one and only " + this); // TODO
         this.value = 'x';
     }
 
@@ -132,10 +131,10 @@ public class Cell {
                 continue;
             }
 
-            if (c.isBlackend()) { // if already blackend, add to set just so we know
+            if (c.isBlackend()) {
                 addToBlackSurroundings(c);
             } else {
-                remaining.add(c); // remaining cells we may have to check
+                remaining.add(c);
             }
         }
 
@@ -156,21 +155,16 @@ public class Cell {
         if (isBlackend()) return true;
         if (isNumber()) return false;
 
-        // cell is an empty one
-        // gotta check if surroundings are satisfied
         Cell above = board.getCell(this.x, this.y - 1);
         Cell below = board.getCell(this.x, this.y + 1);
         Cell left = board.getCell(this.x - 1, this.y);
         Cell right = board.getCell(this.x + 1, this.y);
 
-        // if one of the surroundings are already satisfied
-        // the cell in question cant be blackend
         if (above != null && above.isStatisfied()) return false;
         if (below != null && below.isStatisfied()) return false;
         if (left != null && left.isStatisfied()) return false;
         if (right != null && right.isStatisfied()) return false;
 
-        // i hope so
         return true;
     }
 

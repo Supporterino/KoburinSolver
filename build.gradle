@@ -15,7 +15,10 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
     compile group: 'org.json', name: 'json', version: '20190722'
 }
 
@@ -32,4 +35,9 @@ jar {
     manifest {
         attributes 'Main-Class': 'gui.Main'
     }
+}
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
 }

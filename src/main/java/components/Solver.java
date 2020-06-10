@@ -2,10 +2,8 @@ package components;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
 import gui.Main;
-import javafx.application.Platform;
-
+/* author = 4102770 */
 public class Solver implements Runnable {
 
     private int counter;
@@ -31,40 +29,11 @@ public class Solver implements Runnable {
         controller.update(board);
     }
 
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
-    }
-
-    public Board getBoard() {
-        return this.board;
-    }
-
-    public boolean getSolutionState() {
-        return solutionFound;
-    }
-
-    public void setSolutionState(boolean solutionFound) {
-        this.solutionFound = solutionFound;
-    }
-
-    public void setCounter(int counter) {
+    private void setCounter(int counter) {
         this.counter = counter;
     }
 
-    public void addCheckedBoard(String board) {
-        this.historicBoards.add(board);
-    }
-
-    public boolean alreadyChecked(String board) {
-        return historicBoards.contains(board);
-    }
-
-
-    public boolean finalValidation() {
+    private boolean finalValidation() {
         for (Cell[] row : board.getInternalBoard()) {
             for (Cell field : row) {
                 if (!field.isUsed()) {
@@ -72,13 +41,13 @@ public class Solver implements Runnable {
                 }
             }
         }
-        System.out.println("Lösung gefunden!");
+        System.out.println("Solution found!");
         this.solutionFound = true;
         this.counter = 0;
         return true;
     }
 
-    public boolean solve(int x, int y) {
+    private boolean solve(int x, int y) {
         if (this.historicBoards.contains(this.board.toString())) {
             System.out.println("Already checked this board possibility!");
             return false;
@@ -92,21 +61,15 @@ public class Solver implements Runnable {
         reset();
         loader.initConfig(filepath);
         loader.loadConfig();
-        //System.out.println("Initial Board");
-        //System.out.println(board.toString());
     }
 
     private void blackening() {
         board.blackenAdjacentFields();
-        //System.out.println("Blackend Board");
-        //System.out.println(board.toString());
     }
 
     private void oneStep() {
         setCounter(0);
         solve(0, 0);
-        //System.out.println("Possible Solution found:");
-        //System.out.println(solutionFound);
         controller.update(board);
     }
 
@@ -131,7 +94,7 @@ public class Solver implements Runnable {
     }
 
 
-    public boolean solve(Cell currentCell) {
+    private boolean solve(Cell currentCell) {
         if (currentCell.isStart()) {
             return finalValidation();
         }

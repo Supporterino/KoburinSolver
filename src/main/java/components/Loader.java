@@ -4,8 +4,7 @@ import org.json.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-
+/* author = 4102770 */
 public class Loader {
     private JSONObject config;
     private Board board;
@@ -24,7 +23,6 @@ public class Loader {
             int x = numberCells.getJSONObject(i).getInt("x");
             int y = numberCells.getJSONObject(i).getInt("y");
             int value = numberCells.getJSONObject(i).getInt("value");
-            //System.out.println("NumberCell at x:" + x + " y:" + y + " value:" + value);
             Cell[][] tempBoard = board.getInternalBoard();
             tempBoard[y][x].setValue((char) (value + '0'));
             board.setInternalBoard(tempBoard);
@@ -40,9 +38,13 @@ public class Loader {
         }
     }
 
+    public void setConfig(JSONObject config) {
+        this.config = config;
+    }
+
     private String readFile(String file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        String         line = null;
+        String         line;
         StringBuilder  stringBuilder = new StringBuilder();
 
         try {
